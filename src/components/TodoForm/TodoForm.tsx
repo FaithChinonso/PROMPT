@@ -5,6 +5,7 @@ import { TodoContext } from "../../store/todo-context";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+import { timeLog } from "console";
 
 // import { dataActions } from "../../store/data-slice";
 
@@ -18,18 +19,25 @@ const TodoForm: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const todoCtx = useContext(TodoContext);
-  const todoTextInputRef = useRef<HTMLInputElement>(null);
+  const todoTextInputRef = useRef<HTMLTextAreaElement>(null);
   const todoTitleInputRef = useRef<HTMLInputElement>(null);
   const todoTimeInputRef = useRef<HTMLInputElement>(null);
 
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
-
+    let noww = moment();
+    console.log(noww);
+    console.log(selectedDate);
+    const now = new Date();
+    let secondsLeft = moment(selectedDate).diff(moment(), "seconds");
+    console.log(secondsLeft);
+    console.log(now);
+    console.log(moment(selectedDate).calendar());
     const enteredTitle = todoTitleInputRef.current!.value;
     const enteredText = todoTextInputRef.current!.value;
     const enteredPriority = selectValue;
-    const enteredTime = moment(selectedDate).startOf("hour").fromNow();
-
+    const enteredTime = selectedDate.toString();
+    const time = moment(now).calendar();
     if (
       enteredText?.trim().length === 0 &&
       enteredTitle?.trim().length === 0 &&
@@ -38,7 +46,14 @@ const TodoForm: React.FC = () => {
     ) {
       return;
     }
-    todoCtx.addTodo(enteredText, enteredTitle, enteredTime, enteredPriority);
+    todoCtx.addTodo(
+      enteredText,
+      enteredTitle,
+      enteredTime,
+      enteredPriority,
+      time,
+      (secondsLeft = 0)
+    );
   };
   const selectOptionHandler = (e: React.FormEvent<HTMLSelectElement>) => {
     setSelectValue(e.currentTarget.value);
@@ -47,33 +62,67 @@ const TodoForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={submitHandler}>
-      <div>
-        <label htmlFor="title">Title</label>
-        <input type="text" id="title" ref={todoTitleInputRef} />
+    <form
+      className="w-4/5 m-auto mt-10 gap-4 rounded shadow-sm shadow-meduimGrey flex flex-col justify-between items-center p-4 md:w-3/4 xl:w-3/5  "
+      onSubmit={submitHandler}
+    >
+      <div className="w-3/4 flex flex-col md:w-1/2">
+        <label
+          htmlFor="title"
+          className="text-darkGrey text-1xl text-center mb-2"
+        >
+          Title
+        </label>
+        <input
+          type="text"
+          id="title"
+          className=" text-darkGrey text-1xl border border-lightGrey rounded focus:outline-none p-2"
+          ref={todoTitleInputRef}
+        />
       </div>
-      <div>
-        <label htmlFor="text">Description</label>
-        <input type="text" id="text" ref={todoTextInputRef} />
+      <div className="w-3/4 flex flex-col md:w-1/2">
+        <label
+          htmlFor="text"
+          className="text-darkGrey text-1xl text-center mb-2"
+        >
+          Description
+        </label>
+        <textarea
+          id="text"
+          className="text-darkGrey text-1xl border border-lightGrey rounded focus:outline-none p-2"
+          ref={todoTextInputRef}
+        />
       </div>
-      <div>
-        <label htmlFor="time">Time</label>
+      <div className="w-3/4 flex flex-col items-center md:w-1/2">
+        <label
+          htmlFor="time"
+          className="text-darkGrey text-1xl text-center mb-2"
+        >
+          Time
+        </label>
         <DatePicker
           selected={selectedDate}
           onChange={(date: Date) => setSelectedDate(date)}
           timeInputLabel="Time:"
           dateFormat="MM/dd/yyyy h:mm aa"
           showTimeInput
+          className="w-full text-center text-darkGrey text-1xl border border-lightGrey rounded focus:outline-none p-2"
         />
       </div>
-      <div>
-        <label htmlFor="priority">Priority</label>
+      <div className="w-3/4 flex flex-col items-center md:w-1/2">
+        <label
+          htmlFor="priority"
+          className="text-darkGrey text-1xl text-center mb-2"
+        >
+          Priority
+        </label>
         <select
           name="priority"
           placeholder="Priority"
           id="priority"
           onChange={e => selectOptionHandler(e)}
           value={selectValue}
+          className="w-full text-center text-darkGrey text-1xl border border-lightGrey rounded focus:outline-none p-2"
         >
           {options.map(option => (
             <option value={option.name} id={option.id}>
@@ -83,7 +132,12 @@ const TodoForm: React.FC = () => {
         </select>
       </div>
 
-      <button type="submit">Add Todo</button>
+      <button
+        type="submit"
+        className="w-1/4 text-accent bg-accentLight border border-accentLight p-3 rounded-full hover:bg-accent hover:text-white"
+      >
+        Add Todo
+      </button>
     </form>
   );
 };
