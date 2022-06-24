@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import TodoType from "../Models/todo";
+import { SettingsRemoteRounded } from "@mui/icons-material";
 
 type TodosContextObj = {
   items: TodoType[];
@@ -14,12 +15,15 @@ type TodosContextObj = {
     time: string,
     priority: string,
     currentTime: string,
-    secondsLeft: number
+    secondsLeft: number,
+    isDone: boolean,
+    alarm: boolean
   ) => void;
   removeTodo: (id: string) => void;
   showForm: () => void;
   showTask: () => void;
   showMenu: () => void;
+  doneTask: (id: string) => void;
 };
 type Props = {
   children?: React.ReactChild | React.ReactChild[];
@@ -34,6 +38,7 @@ export const TodoContext = React.createContext<TodosContextObj>({
   showForm: () => {},
   showTask: () => {},
   showMenu: () => {},
+  doneTask: () => {},
 });
 
 const TodoContextProvider: React.FC<Props> = props => {
@@ -41,17 +46,60 @@ const TodoContextProvider: React.FC<Props> = props => {
   const [formShow, setFormShow] = useState(false);
   const [taskShow, setTaskShow] = useState(false);
   const [menuShow, setMenuShow] = useState(false);
+  const [alarm, setAlarm] = useState(false);
 
+  // useEffect(() => {
+  //   // const timer = setInterval(() => {
+  //   const newBookings = todos.map(todo => {
+  //     // console.log(todo.time);
+  //     // console.log(moment());
+
+  //     // const timer = setInterval(() => {
+
+  //     //   return secondsLeft;
+  //     //   // if (second <= 0) {
+  //     //   //   clearInterval(timer);
+  //     //   // }
+  //     // }, 1000);
+  //     let secondsLeft = moment(todo.time).diff(moment(), "seconds");
+
+  //     // setTimeout(() => {
+  //     //   clearInterval(timer);
+  //     // }, secondsLeft);
+
+  //     // clearTimeout(timer);
+  //     console.log(todos, secondsLeft);
+
+  //     return {
+  //       ...todo,
+  //       secondsLeft: secondsLeft,
+  //     };
+  //   });
+
+  //   // setTodos(newBookings);
+  //   // }, 1000);
+
+  //   // return () => {
+  //   //
+  //   // };
+  // }, []);
   useEffect(() => {
     const timer = setInterval(() => {
       const newBookings = todos.map(todo => {
         // console.log(todo.time);
         // console.log(moment());
-        const time = moment(todo.time).format("H:mm");
-        // console.log(time);
+        const time = moment(todo.time).diff(moment(), "seconds");
+        console.log(time);
+        if (time < 0) {
+          clearInterval(timer);
+          todo.alarm = true;
+        } else {
+          todo.alarm = false;
+        }
+
         return {
           ...todo,
-          secondsLeft: moment(todo.time).diff(moment(), "seconds"),
+          secondsLeft: time,
         };
       });
       console.log(newBookings);
@@ -68,7 +116,9 @@ const TodoContextProvider: React.FC<Props> = props => {
     todoTime: string,
     todoPriority: string,
     currentTime: string,
-    secondsLeft: number
+    secondsLeft: number,
+    isDone: boolean,
+    alarm: boolean
   ) => {
     const newTodo = new TodoType(
       todoText,
@@ -76,7 +126,9 @@ const TodoContextProvider: React.FC<Props> = props => {
       todoTime,
       todoPriority,
       currentTime,
-      secondsLeft
+      secondsLeft,
+      isDone,
+      alarm
     );
 
     setTodos(prevTodos => {
@@ -90,6 +142,15 @@ const TodoContextProvider: React.FC<Props> = props => {
     setTodos(prevTodos => {
       return prevTodos.filter(todo => todo.id !== todoId);
     });
+  };
+  const doneTaskHandler = (todoId: string) => {
+    // const selectedTodo = todos.filter(todo => todo.id === todoId);
+    setTodos(
+      todos.map(todo =>
+        todo.id === todoId ? { ...todo, isDone: !todo.isDone } : todo
+      )
+    );
+    console.log(todos);
   };
   const showFormHandler = () => {
     setFormShow(prev => !prev);
@@ -115,6 +176,7 @@ const TodoContextProvider: React.FC<Props> = props => {
     showForm: showFormHandler,
     showTask: showTaskHandler,
     showMenu: showMenuHandler,
+    doneTask: doneTaskHandler,
   };
 
   return (

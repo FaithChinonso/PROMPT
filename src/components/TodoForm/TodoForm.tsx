@@ -38,6 +38,9 @@ const TodoForm: React.FC = () => {
     const enteredPriority = selectValue;
     const enteredTime = selectedDate.toString();
     const time = moment(now).calendar();
+    const isDone = false;
+    const alarm = false;
+
     if (
       enteredText?.trim().length === 0 &&
       enteredTitle?.trim().length === 0 &&
@@ -52,8 +55,11 @@ const TodoForm: React.FC = () => {
       enteredTime,
       enteredPriority,
       time,
-      (secondsLeft = 0)
+      secondsLeft,
+      isDone,
+      alarm
     );
+    todoCtx.showTask();
   };
   const selectOptionHandler = (e: React.FormEvent<HTMLSelectElement>) => {
     setSelectValue(e.currentTarget.value);
@@ -63,14 +69,11 @@ const TodoForm: React.FC = () => {
 
   return (
     <form
-      className="w-4/5 m-auto mt-10 gap-4 rounded shadow-sm shadow-meduimGrey flex flex-col justify-between items-center p-4 md:w-3/4 xl:w-3/5  "
+      className="w-4/5 bg-darkGrey m-auto mt-10 gap-4 rounded shadow-sm shadow-meduimGrey flex flex-col justify-between items-center p-4 md:w-3/4 xl:w-3/5  "
       onSubmit={submitHandler}
     >
       <div className="w-3/4 flex flex-col md:w-1/2">
-        <label
-          htmlFor="title"
-          className="text-darkGrey text-1xl text-center mb-2"
-        >
+        <label htmlFor="title" className="text-white text-1xl text-center mb-2">
           Title
         </label>
         <input
@@ -81,10 +84,7 @@ const TodoForm: React.FC = () => {
         />
       </div>
       <div className="w-3/4 flex flex-col md:w-1/2">
-        <label
-          htmlFor="text"
-          className="text-darkGrey text-1xl text-center mb-2"
-        >
+        <label htmlFor="text" className="text-white text-1xl text-center mb-2">
           Description
         </label>
         <textarea
@@ -94,10 +94,7 @@ const TodoForm: React.FC = () => {
         />
       </div>
       <div className="w-3/4 flex flex-col items-center md:w-1/2">
-        <label
-          htmlFor="time"
-          className="text-darkGrey text-1xl text-center mb-2"
-        >
+        <label htmlFor="time" className="text-white text-1xl text-center mb-2">
           Time
         </label>
         <DatePicker
@@ -112,7 +109,7 @@ const TodoForm: React.FC = () => {
       <div className="w-3/4 flex flex-col items-center md:w-1/2">
         <label
           htmlFor="priority"
-          className="text-darkGrey text-1xl text-center mb-2"
+          className="text-white text-1xl text-center mb-2"
         >
           Priority
         </label>

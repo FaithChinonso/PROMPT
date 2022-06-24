@@ -16,7 +16,10 @@ const Todo: React.FC = () => {
           priority={item.priority}
           currentTime={item.currentTime}
           secondsLeft={item.secondsLeft}
+          isDone={item.isDone}
+          alarm={item.alarm}
           onRemoveTodo={todoCtx.removeTodo.bind(null, item.id)}
+          onDoneTask={todoCtx.doneTask.bind(null, item.id)}
         />
       ))}
     </ul>

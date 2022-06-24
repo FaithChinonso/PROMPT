@@ -36,12 +36,10 @@ const HomePage: React.FC = () => {
   //   };
   const showFormHandler = () => {};
   return (
-    <div className="py-2 px-8 md:px-14 lg:px-24 xl:px-32 max-h-screen overflow-scroll  h-screen relative">
+    <div className="py-2 px-8 md:px-14 lg:px-24 xl:px-32 max-h-screen overflow-scroll  h-screen relative bg-lightGrey">
       <nav className="  flex items-center justify-between mx-auto w-full max-h-10 overflow-visible">
         <div className=" w-48 text-center px-2 py-2 text-darkPrimary font-extralight text-4xl italic font-['blaka'] ">
-          JUST
-          <span className="font-bold text-accent translate-y-6">do</span>
-          IT.
+          PROMPT
         </div>
         <div className="hidden md:flex justify-between w-3/5">
           <div
