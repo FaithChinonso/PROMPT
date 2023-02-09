@@ -6,6 +6,8 @@ class TodoType {
   priority: string;
   currentTime: string;
   secondsLeft: number;
+  isDone: boolean;
+  alarm: boolean;
 
   constructor(
     todoText: string,
@@ -13,7 +15,9 @@ class TodoType {
     todoTime: string,
     todoPriority: string,
     currentTime: string,
-    secondsLeft: number
+    secondsLeft: number,
+    isDone: boolean,
+    alarm: boolean
   ) {
     this.text = todoText;
     this.title = todoTitle;
@@ -22,6 +26,8 @@ class TodoType {
     this.currentTime = currentTime;
     this.secondsLeft = secondsLeft;
     this.id = new Date().toISOString();
+    this.isDone = isDone;
+    this.alarm = alarm;
   }
 }
 export default TodoType;

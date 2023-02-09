@@ -1,7 +1,8 @@
 import React, { useContext, useRef, useState } from "react";
-import TodoType from "../../Models/todo";
+import TodoType from "../Models/todo";
 import { useDispatch } from "react-redux";
-import { TodoContext } from "../../store/todo-context";
+import { TodoContext } from "../store/todo-context";
+import { UiContext } from "../store/ui-context";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
@@ -10,6 +11,7 @@ import { timeLog } from "console";
 // import { dataActions } from "../../store/data-slice";
 
 const options: { name: string; id: string }[] = [
+  { name: "", id: "p1" },
   { name: "High", id: "p1" },
   { name: "Low", id: "p2" },
   { name: "Intermediate", id: "p3" },
@@ -17,43 +19,49 @@ const options: { name: string; id: string }[] = [
 const TodoForm: React.FC = () => {
   const [selectValue, setSelectValue] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [enteredPriority, setEnteredPriority] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   const todoCtx = useContext(TodoContext);
+
+  const uiCtx = useContext(UiContext);
   const todoTextInputRef = useRef<HTMLTextAreaElement>(null);
   const todoTitleInputRef = useRef<HTMLInputElement>(null);
   const todoTimeInputRef = useRef<HTMLInputElement>(null);
 
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
-    let noww = moment();
-    console.log(noww);
-    console.log(selectedDate);
     const now = new Date();
     let secondsLeft = moment(selectedDate).diff(moment(), "seconds");
-    console.log(secondsLeft);
-    console.log(now);
-    console.log(moment(selectedDate).calendar());
     const enteredTitle = todoTitleInputRef.current!.value;
     const enteredText = todoTextInputRef.current!.value;
-    const enteredPriority = selectValue;
+    setEnteredPriority(selectValue);
     const enteredTime = selectedDate.toString();
     const time = moment(now).calendar();
+    const isDone = false;
+    const alarm = false;
+    console.log(enteredText, enteredTitle, enteredTime, selectValue);
+
     if (
-      enteredText?.trim().length === 0 &&
-      enteredTitle?.trim().length === 0 &&
-      enteredTime?.trim().length === 0 &&
-      enteredPriority?.trim().length === 0
+      enteredText.length > 0 &&
+      enteredTitle.length > 0 &&
+      enteredTime.length > 0 &&
+      enteredPriority.length > 0
     ) {
-      return;
+      todoCtx.addTodo(
+        enteredText,
+        enteredTitle,
+        enteredTime,
+        enteredPriority,
+        time,
+        secondsLeft,
+        isDone,
+        alarm
+      );
+      uiCtx.showTask();
+    } else {
+      setError("Please fill all fields to submit");
     }
-    todoCtx.addTodo(
-      enteredText,
-      enteredTitle,
-      enteredTime,
-      enteredPriority,
-      time,
-      (secondsLeft = 0)
-    );
   };
   const selectOptionHandler = (e: React.FormEvent<HTMLSelectElement>) => {
     setSelectValue(e.currentTarget.value);
@@ -63,14 +71,12 @@ const TodoForm: React.FC = () => {
 
   return (
     <form
-      className="w-4/5 m-auto mt-10 gap-4 rounded shadow-sm shadow-meduimGrey flex flex-col justify-between items-center p-4 md:w-3/4 xl:w-3/5  "
+      className="w-4/5 bg-meduimGrey m-auto mt-10 gap-4 rounded-3xl shadow-sm shadow-lightGrey flex flex-col justify-between items-center p-4 md:w-3/4 xl:w-3/5  "
       onSubmit={submitHandler}
     >
-      <div className="w-3/4 flex flex-col md:w-1/2">
-        <label
-          htmlFor="title"
-          className="text-darkGrey text-1xl text-center mb-2"
-        >
+      <div className="text-red-300 font-semibold text-sm">{error && error}</div>
+      <div className="w-3/4 flex flex-col ">
+        <label htmlFor="title" className="text-white text-1xl text-center mb-2">
           Title
         </label>
         <input
@@ -80,11 +86,8 @@ const TodoForm: React.FC = () => {
           ref={todoTitleInputRef}
         />
       </div>
-      <div className="w-3/4 flex flex-col md:w-1/2">
-        <label
-          htmlFor="text"
-          className="text-darkGrey text-1xl text-center mb-2"
-        >
+      <div className="w-3/4 flex flex-col">
+        <label htmlFor="text" className="text-white text-1xl text-center mb-2">
           Description
         </label>
         <textarea
@@ -93,11 +96,8 @@ const TodoForm: React.FC = () => {
           ref={todoTextInputRef}
         />
       </div>
-      <div className="w-3/4 flex flex-col items-center md:w-1/2">
-        <label
-          htmlFor="time"
-          className="text-darkGrey text-1xl text-center mb-2"
-        >
+      <div className="w-3/4 flex flex-col items-center ">
+        <label htmlFor="time" className="text-white text-1xl text-center mb-2">
           Time
         </label>
         <DatePicker
@@ -109,10 +109,10 @@ const TodoForm: React.FC = () => {
           className="w-full text-center text-darkGrey text-1xl border border-lightGrey rounded focus:outline-none p-2"
         />
       </div>
-      <div className="w-3/4 flex flex-col items-center md:w-1/2">
+      <div className="w-3/4 flex flex-col items-center">
         <label
           htmlFor="priority"
-          className="text-darkGrey text-1xl text-center mb-2"
+          className="text-white text-1xl text-center mb-2"
         >
           Priority
         </label>
@@ -134,7 +134,7 @@ const TodoForm: React.FC = () => {
 
       <button
         type="submit"
-        className="w-1/4 text-accent bg-accentLight border border-accentLight p-3 rounded-full hover:bg-accent hover:text-white"
+        className="w-1/4 text-white bg-softPrimary border border-accentLight p-3 rounded-full hover:bg-white hover:text-softPrimary"
       >
         Add Todo
       </button>
