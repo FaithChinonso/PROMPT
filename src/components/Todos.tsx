@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
-import TodoItem from "../TodoItem/TodoItem";
-import TodoType from "../../Models/todo";
-import { TodoContext } from "../../store/todo-context";
+import TodoItem from "./TodoItem";
+import { TodoContext } from "../store/todo-context";
 
 const Todo: React.FC = () => {
   const todoCtx = useContext(TodoContext);

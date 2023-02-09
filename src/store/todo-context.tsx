@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import TodoType from "../Models/todo";
-import { SettingsRemoteRounded } from "@mui/icons-material";
 
 type TodosContextObj = {
   items: TodoType[];
-  task: boolean;
-  form: boolean;
-  menu: boolean;
-
   addTodo: (
     text: string,
     title: string,
@@ -20,33 +15,21 @@ type TodosContextObj = {
     alarm: boolean
   ) => void;
   removeTodo: (id: string) => void;
-  showForm: () => void;
-  showTask: () => void;
-  showMenu: () => void;
   doneTask: (id: string) => void;
 };
+
+export const TodoContext = React.createContext<TodosContextObj>({
+  items: [],
+  addTodo: () => {},
+  removeTodo: (id: string) => {},
+  doneTask: () => {},
+});
 type Props = {
   children?: React.ReactChild | React.ReactChild[];
 };
-export const TodoContext = React.createContext<TodosContextObj>({
-  items: [],
-  task: false,
-  form: false,
-  menu: false,
-  addTodo: () => {},
-  removeTodo: (id: string) => {},
-  showForm: () => {},
-  showTask: () => {},
-  showMenu: () => {},
-  doneTask: () => {},
-});
 
 const TodoContextProvider: React.FC<Props> = props => {
   const [todos, setTodos] = useState<TodoType[]>([]);
-  const [formShow, setFormShow] = useState(false);
-  const [taskShow, setTaskShow] = useState(false);
-  const [menuShow, setMenuShow] = useState(false);
-  const [alarm, setAlarm] = useState(false);
 
   // useEffect(() => {
   //   // const timer = setInterval(() => {
@@ -86,8 +69,6 @@ const TodoContextProvider: React.FC<Props> = props => {
   useEffect(() => {
     const timer = setInterval(() => {
       const newBookings = todos.map(todo => {
-        // console.log(todo.time);
-        // console.log(moment());
         const time = moment(todo.time).diff(moment(), "seconds");
         console.log(time);
         if (time < 0) {
@@ -134,8 +115,6 @@ const TodoContextProvider: React.FC<Props> = props => {
     setTodos(prevTodos => {
       return prevTodos.concat(newTodo);
     });
-
-    setFormShow(false);
   };
 
   const removeTodoHandler = (todoId: string) => {
@@ -152,30 +131,13 @@ const TodoContextProvider: React.FC<Props> = props => {
     );
     console.log(todos);
   };
-  const showFormHandler = () => {
-    setFormShow(prev => !prev);
-    setTaskShow(false);
-    setMenuShow(false);
-  };
-  const showTaskHandler = () => {
-    setTaskShow(prev => !prev);
-    setFormShow(false);
-    setMenuShow(false);
-  };
-  const showMenuHandler = () => {
-    setMenuShow(prev => !prev);
-  };
 
   const contextValue: TodosContextObj = {
     items: todos,
-    task: taskShow,
-    form: formShow,
-    menu: menuShow,
+
     addTodo: addTodoHandler,
     removeTodo: removeTodoHandler,
-    showForm: showFormHandler,
-    showTask: showTaskHandler,
-    showMenu: showMenuHandler,
+
     doneTask: doneTaskHandler,
   };
 

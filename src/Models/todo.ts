@@ -1,5 +1,3 @@
-import { BooleanLiteral } from "typescript";
-
 class TodoType {
   id: string;
   text: string;
