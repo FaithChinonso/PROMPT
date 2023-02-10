@@ -70,7 +70,6 @@ const TodoContextProvider: React.FC<Props> = props => {
     const timer = setInterval(() => {
       const newBookings = todos.map(todo => {
         const time = moment(todo.time).diff(moment(), "seconds");
-        console.log(time);
         if (time < 0) {
           clearInterval(timer);
           todo.alarm = true;
@@ -83,7 +82,6 @@ const TodoContextProvider: React.FC<Props> = props => {
           secondsLeft: time,
         };
       });
-      console.log(newBookings);
       setTodos(newBookings);
     }, 1000);
     return () => {

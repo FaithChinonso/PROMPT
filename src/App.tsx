@@ -6,20 +6,23 @@ import TodoForm from "./components/TodoForm";
 import TodoContextProvider from "./store/todo-context";
 import ScheduleContextProvider from "./store/schedule-context";
 import UiContextProvider from "./store/ui-context";
+import AuthContextProvider from "./store/auth-context";
 import HomePage from "./Pages/HomePage";
 import Layout from "./components/Layout";
-import SigninPage from "./components/SigninPage";
+import SigninPage from "./Pages/SigninPage";
+import Routes from "./AppRoutes";
+import AppRoutes from "./AppRoutes";
 
 function App() {
   return (
     <UiContextProvider>
-      <ScheduleContextProvider>
-        <TodoContextProvider>
-          <Layout type="none">
-            <SigninPage />
-          </Layout>
-        </TodoContextProvider>
-      </ScheduleContextProvider>
+      <AuthContextProvider>
+        <ScheduleContextProvider>
+          <TodoContextProvider>
+            <AppRoutes />
+          </TodoContextProvider>
+        </ScheduleContextProvider>
+      </AuthContextProvider>
     </UiContextProvider>
   );
 }

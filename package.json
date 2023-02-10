@@ -20,6 +20,7 @@
     "@types/react-dom": "^18.0.0",
     "@types/react-lottie": "^1.2.6",
     "@types/react-redux": "^7.1.24",
+    "firebase": "^9.17.1",
     "lottie-react": "^2.2.1",
     "moment": "^2.29.3",
     "react": "^18.1.0",
@@ -38,7 +39,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "npx typesync"
   },
   "eslintConfig": {
     "extends": [
