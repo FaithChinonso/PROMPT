@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { TodoContext } from "../store/todo-context";
 import { UiContext } from "../store/ui-context";
 import TodoType from "../Models/todo";
@@ -8,9 +8,14 @@ import TodoForm from "../components/TodoForm";
 import ScheduleForm from "../components/ScheduleForm";
 import Calendar from "react-calendar";
 
+import Layout from "../components/Layout";
+import { redirect } from "react-router-dom";
+import { AuthContext } from "../store/auth-context";
+
 const HomePage: React.FC = () => {
   const todoCxt = useContext(TodoContext);
   const uiCxt = useContext(UiContext);
+  const authCxt = useContext(AuthContext);
   const [data, setData] = useState<TodoType[]>([]);
   const [showSearch, setShowSearch] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -37,10 +42,10 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className=" max-h-screen overflow-scroll  h-screen relative bg-white">
-      <body className="">
-        <div
-          className={`bg-darkPrimary  -bottom-16 -right-16   flex  z-0  ${
+    <Layout type="all">
+      <div className=" max-h-screen overflow-scroll  h-screen relative bg-red-200">
+        {/* <div
+          className={`bg-darkPrimary -bottom-16 -right-16 flex  z-0  ${
             showForms
               ? "w-full h-full relative rounded"
               : "w-36 h-36 fixed rounded-full items-center justify-center"
@@ -57,11 +62,11 @@ const HomePage: React.FC = () => {
           ) : (
             <Add className="text-3xl text-softPrimary " />
           )}
-          {uiCxt.form === "Task" ? <TodoForm /> : ""}
-          {uiCxt.form === "Schedule" ? <Calendar /> : ""}
         </div>
-      </body>
-    </div>
+        {uiCxt.form === "Task" ? <TodoForm /> : ""}
+        {uiCxt.form === "Schedule" ? <Calendar /> : ""} */}
+      </div>
+    </Layout>
   );
 };
 export default HomePage;

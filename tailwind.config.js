@@ -15,7 +15,7 @@ module.exports = {
         meduimPrimary: "rgb(139,0,139)",
         darkPrimary: "rgb(75,0,130)",
         softSecondaryLight: "rgba(192,197,206, 10%)",
-        lightGrey: "rgb(167,173,186)",
+        lightGrey: "rgba(167,173,186, 0.4)",
         dimGrey: "rgb(101,115,126)",
         meduimGrey: "rgb(79,91,102)",
         darkGrey: "rgb(52,61,70)",

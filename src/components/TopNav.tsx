@@ -3,6 +3,9 @@ import { UiContext } from "../store/ui-context";
 import MenuIcon from "@mui/icons-material/Menu";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import SearchIcon from "@mui/icons-material/Search";
+import { navItems } from "../utils/arrayItems";
+import { navType } from "../types/arrayTypes";
+import { Outlet, Link } from "react-router-dom";
 
 type Props = {
   type: string;
@@ -11,26 +14,20 @@ const TopNav: React.FC<Props> = ({ type }) => {
   const uiCxt = useContext(UiContext);
   const [showSearch, setShowSearch] = useState(false);
   return (
-    <nav className="  flex items-center justify-between mx-auto w-full max-h-10 overflow-visible bg-softPrimary px-8 md:px-14 lg:px-24 xl:px-32 py-11 z-10 shadow-2xl shadow-meduimGrey ">
+    <nav className="fixed top-0 left-0 flex items-center justify-between mx-auto w-full max-h-10 overflow-visible bg-softPrimary px-8 md:px-14 lg:px-24 xl:px-32 py-11 z-10 shadow-2xl shadow-lightGrey ">
       <div className=" w-48 text-center px-2 py-2 text-darkPrimary font-extralight text-4xl italic font-['blaka'] ">
         PROMPT
       </div>
       {type === "all" ? (
         <>
           <div className="hidden md:flex justify-between w-3/5">
-            <div
-              onClick={uiCxt.showTask}
-              className=" items-center justify-around  w-64 flex"
-            >
-              <div
-                className="text-darkGrey hover:text-accent"
-                onClick={uiCxt.showTask}
-              >
-                Tasks
-              </div>
-              <div className="text-darkGrey hover:text-accent">Projects</div>
-              <div className="text-darkGrey hover:text-accent">Schedule</div>
-            </div>
+            <ul className=" items-center justify-center flex-1 flex space-x-6">
+              {navItems.map((item: navType) => (
+                <li key={item.id}>
+                  <Link to={item.route}>{item.name}</Link>
+                </li>
+              ))}
+            </ul>
             <div className="">
               {showSearch ? (
                 <input
