@@ -13,6 +13,8 @@ import { AuthContext } from "../store/auth-context";
 import { UiContext } from "../store/ui-context";
 import { redirect } from "react-router-dom";
 import UserType from "../Models/user";
+import { sendUserDetails } from "../request";
+import useHTTPPut from "../Hooks/use-httppost";
 
 const firebaseConfigg = {
   apiKey: "AIzaSyDg71k534FWKegc-EZgXWD3m2V7pixReRI",
@@ -29,6 +31,7 @@ const AuthForm = () => {
   const authCtx = useContext(AuthContext);
   const uiCtx = useContext(UiContext);
   const auth = getAuth();
+  const paste = useHTTPPut();
   const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [data, setData] = useState<{ email: string; password: any }>({
@@ -36,6 +39,9 @@ const AuthForm = () => {
     password: "",
   });
   initializeApp(firebaseConfigg);
+  const sendUser = (data: UserType) => {
+    paste({ endpoint: "user.json", data });
+  };
   const submitFormHandler = (e: any) => {
     e.preventDefault();
     if (data.email === "" || data.password === "") {
@@ -55,11 +61,11 @@ const AuthForm = () => {
             lastLogin: user.metadata.lastSignInTime,
             name: user.displayName,
           };
-          authCtx.addUser(payload);
+          sendUser(payload);
           setError("Successfully signed in");
           console.log(userCredential.user?.email);
           console.log(authCtx.currentUser);
-          redirect("/home");
+          window.location.href = "/home";
         })
         .catch(error => {
           const errorCode = error.code;
