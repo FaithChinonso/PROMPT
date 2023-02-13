@@ -21,14 +21,20 @@ type Props = {
 const Layout: React.FC<Props> = ({ children, type }) => {
   const authCtx = useContext(AuthContext);
   const [user, loading, error] = useAuthState(auth);
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");
   const navigate = useNavigate();
-  const fetchEmail = async () => {
+  const fetchDetails = async () => {
     try {
       const q = query(collection(db, "users"), where("uid", "==", user?.uid));
       const doc = await getDocs(q);
       const data = doc.docs[0].data();
-      setEmail(data.email);
+
+      authCtx.addUser({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        uid: data.uid,
+      });
     } catch (err) {
       console.error(err);
       alert("An error occured while fetching user data");
@@ -37,10 +43,10 @@ const Layout: React.FC<Props> = ({ children, type }) => {
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate("/");
-    fetchEmail();
+    fetchDetails();
   }, [user, loading]);
   return (
-    <body className="h-screen relative bg-white">
+    <body className="h-screen relative bg-white py-10">
       <TopNav type={type} />
       <main className="mt-10">{children}</main>
     </body>
