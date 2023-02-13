@@ -90,12 +90,15 @@ const SigninPage = () => {
           </div>
         )}
         <div className="text-right text-xs text-meduimGrey mt-8 w-full">
-          Already have an account?{" "}
+          {" "}
+          {!uiCtx.signedIn
+            ? "Already have an account"
+            : "Don't have an account?"}
           <span
             className="cursor-pointer text-softPrimary ml-1"
             onClick={() => uiCtx.setSignedIn()}
           >
-            Sign In
+            {!uiCtx.signedIn ? "Sign In" : "Sign Up"}
           </span>
         </div>
       </div>

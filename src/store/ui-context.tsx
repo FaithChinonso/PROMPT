@@ -15,7 +15,7 @@ export const UiContext = createContext<UiContextObj>({
   task: false,
   form: "",
   menu: false,
-  signedIn: false,
+  signedIn: true,
   showForm: (str: string) => {},
   showTask: () => {},
   showMenu: () => {},
@@ -30,7 +30,7 @@ const UiContextProvider: React.FC<Props> = props => {
   const [formShow, setFormShow] = useState("");
   const [taskShow, setTaskShow] = useState(false);
   const [menuShow, setMenuShow] = useState(false);
-  const [signed, setSigned] = useState(false);
+  const [signed, setSigned] = useState(true);
 
   const showFormHandler = (strn: string) => {
     setFormShow(strn);
