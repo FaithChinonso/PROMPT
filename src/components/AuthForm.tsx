@@ -1,91 +1,122 @@
-import React, { SyntheticEvent, useContext, useState } from "react";
+import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useAuthState } from "react-firebase-hooks/auth";
+// import {
+//   signInWithEmailAndPassword,
+//   createUserWithEmailAndPassword,
+//   getAuth,
+// } from "firebase/auth";
+// import {
+//   getFirestore,
+//   query,
+//   getDocs,
+//   collection,
+//   where,
+//   addDoc,
+// } from "firebase/firestore";
+// import { initializeApp } from "firebase/app";
+// import "firebase/auth";
 import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  getAuth,
-} from "firebase/auth";
-import { initializeApp } from "firebase/app";
-import "firebase/auth";
+  auth,
+  registerWithEmailAndPassword,
+  signInWithGoogle,
+  logInWithEmailAndPassword,
+} from "../firebaseConfiq";
 
 import { AuthContext } from "../store/auth-context";
 import { UiContext } from "../store/ui-context";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import UserType from "../Models/user";
 import { sendUserDetails } from "../request";
 import useHTTPPut from "../Hooks/use-httppost";
+import { connectFirestoreEmulator } from "firebase/firestore";
 
-const firebaseConfigg = {
-  apiKey: "AIzaSyDg71k534FWKegc-EZgXWD3m2V7pixReRI",
-  authDomain: "todo-app-a7762.firebaseapp.com",
-  databaseURL: "https://todo-app-a7762-default-rtdb.firebaseio.com",
-  projectId: "todo-app-a7762",
-  storageBucket: "todo-app-a7762.appspot.com",
-  messagingSenderId: "639345066815",
-  appId: "1:639345066815:web:d0d83a6ba328c8e8a8498a",
-  measurementId: "G-CYGCF5SHH5",
-};
+// const firebaseConfigg = {
+//   apiKey: "AIzaSyDg71k534FWKegc-EZgXWD3m2V7pixReRI",
+//   authDomain: "todo-app-a7762.firebaseapp.com",
+//   databaseURL: "https://todo-app-a7762-default-rtdb.firebaseio.com",
+//   projectId: "todo-app-a7762",
+//   storageBucket: "todo-app-a7762.appspot.com",
+//   messagingSenderId: "639345066815",
+//   appId: "1:639345066815:web:d0d83a6ba328c8e8a8498a",
+//   measurementId: "G-CYGCF5SHH5",
+// };
 
 const AuthForm = () => {
   const authCtx = useContext(AuthContext);
   const uiCtx = useContext(UiContext);
-  const auth = getAuth();
+  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
+
   const paste = useHTTPPut();
-  const [error, setError] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [data, setData] = useState<{ email: string; password: any }>({
+  const [data, setData] = useState<{
+    email: string;
+    password: any;
+    name: string;
+  }>({
+    name: "",
     email: "",
     password: "",
   });
-  initializeApp(firebaseConfigg);
+  // initializeApp(firebaseConfigg);
+  // const auth = getAuth();
+  // const db = getFirestore();
+  console.log(error?.name);
+  useEffect(() => {
+    // if (loading) {
+    //   // maybe trigger a loading screen
+    //   return;
+    // }
+    if (user && uiCtx.signedIn) navigate("/home");
+    if (user && !uiCtx.signedIn) uiCtx.setSignedIn();
+  }, [user, loading, uiCtx.signedIn]);
   const sendUser = (data: UserType) => {
     paste({ endpoint: "user.json", data });
   };
   const submitFormHandler = (e: any) => {
     e.preventDefault();
-    if (data.email === "" || data.password === "") {
-      setError("Please fill all fields before submission");
+    if (data.email === "" || data.password === "" || data.name === "") {
+      setErrorMessage("Please fill all fields before submission");
       return;
     }
     if (uiCtx.signedIn) {
-      signInWithEmailAndPassword(auth, data.email, data.password)
-        .then(userCredential => {
-          const user = userCredential.user;
-          const payload: UserType = {
-            email: user.email,
-            uid: user.uid,
-            phone: user.phoneNumber,
-            photo: user.photoURL,
-            creationTime: user.metadata.creationTime,
-            lastLogin: user.metadata.lastSignInTime,
-            name: user.displayName,
-          };
-          sendUser(payload);
-          setError("Successfully signed in");
-          console.log(userCredential.user?.email);
-          console.log(authCtx.currentUser);
-          window.location.href = "/home";
-        })
-        .catch(error => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(`${errorCode} ${errorMessage}`);
-          setError(errorMessage);
-        });
+      // logInWithEmailAndPassword(auth, data.email, data.password)
+      //   .then(userCredential => {
+      //     setError("Successfully signed in");
+      //     console.log(userCredential.user?.email);
+      //     console.log(authCtx.currentUser);
+      //     // window.location.href = "/home";
+      //   })
+      //   .catch(error => {
+      //     const errorCode = error.code;
+      //     const errorMessage = error.message;
+      //     console.log(`${errorCode} ${errorMessage}`);
+      //     setError(errorMessage);
+      //   });
+      logInWithEmailAndPassword(data.email, data.password);
     } else {
-      createUserWithEmailAndPassword(auth, data.email, data.password)
-        .then(userCredential => {
-          setError("Successfully signed up");
-          uiCtx.setSignedIn();
-        })
-        .catch(error => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(`${errorCode} ${errorMessage}`);
-          setError(errorMessage);
-          // ..
-        });
+      registerWithEmailAndPassword(data.email, data.password, data.name);
+
+      // .then(userCredential => {
+      //   setError("Successfully signed up");
+      //   const user = userCredential.user;
+      //   addDoc(collection(db, "users"), {
+      //     uid: user.uid,
+      //     authProvider: "local",
+      //     data.email,
+      //   });
+      //   uiCtx.setSignedIn();
+      // })
+      // .catch(error => {
+      //   const errorCode = error.code;
+      //   const errorMessage = error.message;
+      //   console.log(`${errorCode} ${errorMessage}`);
+      //   setError(errorMessage);
+      //   // ..
+      // });
     }
   };
 
@@ -94,7 +125,22 @@ const AuthForm = () => {
       className="flex flex-col space-y-4 p-4 w-full"
       onSubmit={submitFormHandler}
     >
-      <div>{error && error}</div>
+      <div>{}</div>
+      {!uiCtx.signedIn && (
+        <div className="w-full flex flex-col space-y-3">
+          <label className="" htmlFor="name">
+            Name
+          </label>
+          <input
+            className="border border-dimGrey bg-white text-meduimGrey focus:outline-none p-4 placeholder:text-lightGrey text-sm rounded-lg"
+            type="text"
+            onChange={(e: any) => setData({ ...data, name: e.target.value })}
+            name="name"
+            value={data.name || ""}
+            placeholder="Name"
+          />
+        </div>
+      )}
       <div className="w-full flex flex-col space-y-3">
         <label className="" htmlFor="email">
           Email Address

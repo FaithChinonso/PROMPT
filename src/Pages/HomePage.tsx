@@ -3,6 +3,7 @@ import { TodoContext } from "../store/todo-context";
 import { UiContext } from "../store/ui-context";
 import TodoType from "../Models/todo";
 import { Add } from "@mui/icons-material";
+import { logout } from "../firebaseConfiq";
 
 import TodoForm from "../components/TodoForm";
 import ScheduleForm from "../components/ScheduleForm";
@@ -44,6 +45,9 @@ const HomePage: React.FC = () => {
   return (
     <Layout type="all">
       <div className=" max-h-screen overflow-scroll  h-screen relative bg-red-200">
+        <div className="mt-40" onClick={() => logout()}>
+          Logout
+        </div>
         {/* <div
           className={`bg-darkPrimary -bottom-16 -right-16 flex  z-0  ${
             showForms
