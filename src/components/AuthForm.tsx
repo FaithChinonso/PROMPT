@@ -52,7 +52,12 @@ const AuthForm = () => {
   const paste = useHTTPPut();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [data, setData] = useState<{ email: string; password: any }>({
+  const [data, setData] = useState<{
+    email: string;
+    password: any;
+    name: string;
+  }>({
+    name: "",
     email: "",
     password: "",
   });
@@ -73,7 +78,7 @@ const AuthForm = () => {
   };
   const submitFormHandler = (e: any) => {
     e.preventDefault();
-    if (data.email === "" || data.password === "") {
+    if (data.email === "" || data.password === "" || data.name === "") {
       setErrorMessage("Please fill all fields before submission");
       return;
     }
@@ -93,7 +98,7 @@ const AuthForm = () => {
       //   });
       logInWithEmailAndPassword(data.email, data.password);
     } else {
-      registerWithEmailAndPassword(data.email, data.password);
+      registerWithEmailAndPassword(data.email, data.password, data.name);
 
       // .then(userCredential => {
       //   setError("Successfully signed up");
@@ -121,6 +126,21 @@ const AuthForm = () => {
       onSubmit={submitFormHandler}
     >
       <div>{}</div>
+      {!uiCtx.signedIn && (
+        <div className="w-full flex flex-col space-y-3">
+          <label className="" htmlFor="name">
+            Name
+          </label>
+          <input
+            className="border border-dimGrey bg-white text-meduimGrey focus:outline-none p-4 placeholder:text-lightGrey text-sm rounded-lg"
+            type="text"
+            onChange={(e: any) => setData({ ...data, name: e.target.value })}
+            name="name"
+            value={data.name || ""}
+            placeholder="Name"
+          />
+        </div>
+      )}
       <div className="w-full flex flex-col space-y-3">
         <label className="" htmlFor="email">
           Email Address

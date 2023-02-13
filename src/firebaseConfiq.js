@@ -60,14 +60,20 @@ const logInWithEmailAndPassword = async (email, password) => {
     alert(err.message);
   }
 };
-const registerWithEmailAndPassword = async (email, password) => {
+const registerWithEmailAndPassword = async (email, password, name) => {
   try {
-    const res = await createUserWithEmailAndPassword(auth, email, password);
+    const res = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password,
+      name
+    );
     const user = res.user;
     await addDoc(collection(db, "users"), {
       uid: user.uid,
       authProvider: "local",
       email: user.email,
+      name: user.name,
     });
   } catch (err) {
     console.error(err);
