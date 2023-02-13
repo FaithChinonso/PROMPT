@@ -17,7 +17,6 @@ import {
 } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import "firebase/auth";
-import { UiContext } from "./store/ui-context";
 
 const firebaseConfigg = {
   apiKey: "AIzaSyDg71k534FWKegc-EZgXWD3m2V7pixReRI",
@@ -49,7 +48,6 @@ const signInWithGoogle = async () => {
     }
   } catch (err) {
     console.error(err);
-    alert(err.message);
   }
 };
 const logInWithEmailAndPassword = async (email, password) => {
@@ -57,27 +55,21 @@ const logInWithEmailAndPassword = async (email, password) => {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (err) {
     console.error(err);
-    alert(err.message);
   }
 };
-const registerWithEmailAndPassword = async (email, password, name) => {
+const registerWithEmailAndPassword = async (email, password, name, phone) => {
   try {
-    const res = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password,
-      name
-    );
+    const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
     await addDoc(collection(db, "users"), {
       uid: user.uid,
       authProvider: "local",
-      email: user.email,
-      name: user.name,
+      email: email,
+      name: name,
+      phone: phone,
     });
   } catch (err) {
     console.error(err);
-    alert(err.message);
   }
 };
 const sendPasswordReset = async email => {
@@ -86,7 +78,6 @@ const sendPasswordReset = async email => {
     alert("Password reset link sent!");
   } catch (err) {
     console.error(err);
-    alert(err.message);
   }
 };
 const logout = () => {

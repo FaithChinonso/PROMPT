@@ -15,7 +15,7 @@ const SigninPage = () => {
   const uiCtx = useContext(UiContext);
   console.log(uiCtx.signedIn);
   return (
-    <div className="flex flex-col  items-center justify-center w-full h-screen max-h-screen overflow-hidden relative">
+    <div className="flex flex-col  items-center justify-center w-full h-screen  relative">
       <div className="absolute left-[10%] top-[30%] hidden md:block">
         <Lottie
           options={{
@@ -45,7 +45,7 @@ const SigninPage = () => {
           width={350}
         />
       </div>
-      <div className=" relative flex items-center flex-col justify-center  md:w-[27%] h-screen">
+      <div className=" relative flex items-center flex-col justify-center w-full  md:w-[27%] h-screen">
         <div className=" w-48 text-center px-2 py-2 text-darkPrimary font-extralight text-4xl italic font-['blaka'] ">
           PROMPT
         </div>

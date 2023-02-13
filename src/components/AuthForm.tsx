@@ -56,22 +56,23 @@ const AuthForm = () => {
     email: string;
     password: any;
     name: string;
+    phone: string;
   }>({
     name: "",
     email: "",
     password: "",
+    phone: "",
   });
-  // initializeApp(firebaseConfigg);
-  // const auth = getAuth();
-  // const db = getFirestore();
-  console.log(error?.name);
+
   useEffect(() => {
     // if (loading) {
     //   // maybe trigger a loading screen
     //   return;
     // }
     if (user && uiCtx.signedIn) navigate("/home");
-    if (user && !uiCtx.signedIn) uiCtx.setSignedIn();
+    if (user && !uiCtx.signedIn) {
+      uiCtx.setSignedIn();
+    }
   }, [user, loading, uiCtx.signedIn]);
   const sendUser = (data: UserType) => {
     paste({ endpoint: "user.json", data });
@@ -96,9 +97,27 @@ const AuthForm = () => {
       //     console.log(`${errorCode} ${errorMessage}`);
       //     setError(errorMessage);
       //   });
+      if (data.email === "" || data.password === "") {
+        setErrorMessage("Please fill all fields before submission");
+        return;
+      }
       logInWithEmailAndPassword(data.email, data.password);
     } else {
-      registerWithEmailAndPassword(data.email, data.password, data.name);
+      if (
+        data.email === "" ||
+        data.password === "" ||
+        data.name === "" ||
+        data.phone === ""
+      ) {
+        setErrorMessage("Please fill all fields before submission");
+        return;
+      }
+      registerWithEmailAndPassword(
+        data.email,
+        data.password,
+        data.name,
+        data.phone
+      );
 
       // .then(userCredential => {
       //   setError("Successfully signed up");
@@ -127,19 +146,34 @@ const AuthForm = () => {
     >
       <div>{}</div>
       {!uiCtx.signedIn && (
-        <div className="w-full flex flex-col space-y-3">
-          <label className="" htmlFor="name">
-            Name
-          </label>
-          <input
-            className="border border-dimGrey bg-white text-meduimGrey focus:outline-none p-4 placeholder:text-lightGrey text-sm rounded-lg"
-            type="text"
-            onChange={(e: any) => setData({ ...data, name: e.target.value })}
-            name="name"
-            value={data.name || ""}
-            placeholder="Name"
-          />
-        </div>
+        <>
+          <div className="w-full flex flex-col space-y-3">
+            <label className="" htmlFor="name">
+              Name
+            </label>
+            <input
+              className="border border-dimGrey bg-white text-meduimGrey focus:outline-none p-4 placeholder:text-lightGrey text-sm rounded-lg"
+              type="text"
+              onChange={(e: any) => setData({ ...data, name: e.target.value })}
+              name="name"
+              value={data.name || ""}
+              placeholder="Name"
+            />
+          </div>
+          <div className="w-full flex flex-col space-y-3">
+            <label className="" htmlFor="phone">
+              Phone
+            </label>
+            <input
+              className="border border-dimGrey bg-white text-meduimGrey focus:outline-none p-4 placeholder:text-lightGrey text-sm rounded-lg"
+              type="text"
+              onChange={(e: any) => setData({ ...data, phone: e.target.value })}
+              name="phone"
+              value={data.phone || ""}
+              placeholder="phone"
+            />
+          </div>
+        </>
       )}
       <div className="w-full flex flex-col space-y-3">
         <label className="" htmlFor="email">

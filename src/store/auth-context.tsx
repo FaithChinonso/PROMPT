@@ -4,8 +4,20 @@ import TodoType from "../Models/todo";
 import UserType from "../Models/user";
 
 type AuthContextObj = {
-  currentUser: UserType;
-  addUser: (userInfo: UserType) => void;
+  currentUser: {
+    email: string;
+    uid: string;
+    phone:string;
+   
+    name: string;
+  };
+  addUser: (userInfo: {
+    email: string;
+    uid: string;
+    phone:string;
+   
+    name: string;
+  }) => void;
 };
 
 export const AuthContext = React.createContext<AuthContextObj>({
@@ -13,28 +25,42 @@ export const AuthContext = React.createContext<AuthContextObj>({
     email: "",
     uid: "",
     phone: "",
-    photo: "",
-    creationTime: "",
-    lastLogin: "",
+   
     name: "",
   },
-  addUser: (userInfo: UserType) => {},
+  addUser: (userInfo: {
+    email: string;
+    uid: string;
+    phone:string;
+   
+    name: string;
+  }) => {},
 });
 type Props = {
   children?: React.ReactChild | React.ReactChild[];
 };
 
 const AuthContextProvider: React.FC<Props> = props => {
-  const [user, setUser] = useState<UserType>({
+  const [user, setUser] = useState<{
+    email: string;
+    uid: string;
+    phone:string;
+   
+    name: string;
+  }>({
     email: "",
     uid: "",
     phone: "",
-    photo: "",
-    creationTime: "",
-    lastLogin: "",
     name: "",
+ 
   });
-  const addUserHandler = (userInfo: UserType) => {
+  const addUserHandler = (userInfo: {
+    email: string;
+    uid: string;
+    phone:string;
+   
+    name: string;
+  }) => {
     setUser(userInfo);
   };
   const contextValue: AuthContextObj = {

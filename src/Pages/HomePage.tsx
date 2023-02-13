@@ -48,7 +48,7 @@ const HomePage: React.FC = () => {
         <div className="mt-40" onClick={() => logout()}>
           Logout
         </div>
-        {/* <div
+        <div
           className={`bg-darkPrimary -bottom-16 -right-16 flex  z-0  ${
             showForms
               ? "w-full h-full relative rounded"
@@ -68,7 +68,7 @@ const HomePage: React.FC = () => {
           )}
         </div>
         {uiCxt.form === "Task" ? <TodoForm /> : ""}
-        {uiCxt.form === "Schedule" ? <Calendar /> : ""} */}
+        {uiCxt.form === "Schedule" ? <Calendar /> : ""}
       </div>
     </Layout>
   );
