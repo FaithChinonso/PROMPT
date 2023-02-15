@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { navItems } from "../utils/arrayItems";
 import { navType } from "../types/arrayTypes";
 import { Outlet, Link } from "react-router-dom";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
 type Props = {
   type: string;
@@ -40,6 +41,9 @@ const TopNav: React.FC<Props> = ({ type }) => {
               )}
               <SearchIcon onClick={() => setShowSearch(prev => !prev)} />
             </div>
+            <Link to={"/profile"}>
+              <PersonOutlineOutlinedIcon />
+            </Link>
           </div>
           <button className="block md:hidden focus:outline-none">
             {uiCxt.menu ? (
