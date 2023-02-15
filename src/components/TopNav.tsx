@@ -7,45 +7,41 @@ import { navItems } from "../utils/arrayItems";
 import { navType } from "../types/arrayTypes";
 import { Outlet, Link } from "react-router-dom";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 
 type Props = {
   type: string;
 };
-const TopNav: React.FC<Props> = ({ type }) => {
+const TopNav: React.FC = () => {
   const uiCxt = useContext(UiContext);
   const [showSearch, setShowSearch] = useState(false);
   return (
-    <nav className="fixed top-0 left-0 flex items-center justify-between mx-auto w-full max-h-10 overflow-visible bg-softPrimary px-8 md:px-14 lg:px-24 xl:px-32 py-11 z-10 shadow-2xl shadow-lightGrey ">
-      <div className=" w-48 text-center px-2 py-2 text-darkPrimary font-extralight text-4xl italic font-['blaka'] ">
+    <nav className="fixed top-0 left-0 flex items-center justify-between mx-auto w-full max-h-10 overflow-visible bg-softPrimaryLight px-8 md:px-14 lg:px-24 xl:px-32 py-11 z-10 shadow-2xl shadow-lightGrey ">
+      <div className="  px-2 py-2 text-darkPrimary font-extralight text-4xl italic font-['blaka'] flex-1">
         PROMPT
       </div>
-      {type === "all" ? (
-        <>
-          <div className="hidden md:flex justify-between w-3/5">
-            <ul className=" items-center justify-center flex-1 flex space-x-6">
-              {navItems.map((item: navType) => (
-                <li key={item.id}>
-                  <Link to={item.route}>{item.name}</Link>
-                </li>
-              ))}
-            </ul>
-            <div className="">
-              {showSearch ? (
-                <input
-                  type="text"
-                  className="border-2 border-lightGrey p-2 rounded-md focus:outline-none text-sm transition delay-75 duration-150 ease-in-out"
-                  placeholder="Search... "
-                />
-              ) : (
-                ""
-              )}
-              <SearchIcon onClick={() => setShowSearch(prev => !prev)} />
-            </div>
-            <Link to={"/profile"}>
-              <PersonOutlineOutlinedIcon />
-            </Link>
-          </div>
-          <button className="block md:hidden focus:outline-none">
+
+      <div className="hidden md:flex justify-between space-x-4 text-darkPrimary ">
+        <div className="">
+          {showSearch ? (
+            <input
+              type="text"
+              className="border-2 border-lightGrey p-2 rounded-md focus:outline-none text-sm transition delay-75 duration-150 ease-in-out w-[250px]"
+              placeholder="Search... "
+            />
+          ) : (
+            ""
+          )}
+          <SearchIcon onClick={() => setShowSearch(prev => !prev)} />
+        </div>
+        <div className="hover:text-white">
+          <NotificationsNoneIcon />
+        </div>
+        <Link to={"/profile"}>
+          <PersonOutlineOutlinedIcon />
+        </Link>
+      </div>
+      {/* <button className="block md:hidden focus:outline-none">
             {uiCxt.menu ? (
               <HighlightOffIcon
                 className="text-1xl text-accent"
@@ -71,11 +67,7 @@ const TopNav: React.FC<Props> = ({ type }) => {
             </div>
           ) : (
             ""
-          )}
-        </>
-      ) : (
-        ""
-      )}
+          )} */}
     </nav>
   );
 };

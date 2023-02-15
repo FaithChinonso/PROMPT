@@ -64,21 +64,26 @@ const SigninPage = () => {
             <TwitterIcon className="text-meduimGrey hover:text-white" />
           </div>
         </div> */}
-        <div
-          className="bg-white text-darkGrey w-56 py-4  text-center shadow-sm shadow-lightGrey"
-          onClick={() => setShowForm(false)}
-        >
-          <span>
-            {" "}
-            <GoogleIcon className="text-meduimGrey hover:text-white mr-2" />
-          </span>
-          {uiCtx.signedIn ? "Signin with Google" : " Signup with Google"}
-        </div>
-        <div className="flex justify-center items-center space-x-1 my-4">
-          <div className="w-3 h-[1px] bg-dimGrey "></div>
-          <div className="text-meduimGrey font-semibold ">OR</div>
-          <div className="w-3 h-[1px] bg-dimGrey"></div>
-        </div>
+        {uiCtx.signedIn && (
+          <>
+            <div
+              className="bg-white text-darkGrey w-56 py-4  text-center shadow-sm shadow-lightGrey"
+              onClick={() => setShowForm(false)}
+            >
+              <span>
+                {" "}
+                <GoogleIcon className="text-meduimGrey hover:text-white mr-2" />
+              </span>
+              Signin with Google
+            </div>
+            <div className="flex justify-center items-center space-x-1 my-4">
+              <div className="w-3 h-[1px] bg-dimGrey "></div>
+              <div className="text-meduimGrey font-semibold ">OR</div>
+              <div className="w-3 h-[1px] bg-dimGrey"></div>
+            </div>
+          </>
+        )}
+
         {showForm ? (
           <AuthForm />
         ) : (

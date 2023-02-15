@@ -8,10 +8,10 @@ import hero from "../assets/images/clock.jpg";
 import TodoForm from "../components/TodoForm";
 import ScheduleForm from "../components/ScheduleForm";
 import Calendar from "react-calendar";
-import { Fade, Zoom, Rotate, Reveal, Slide } from "react-reveal";
+import { Reveal } from "react-awesome-reveal";
 
 import Layout from "../components/Layout";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../store/auth-context";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -20,9 +20,10 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Autoplay } from "swiper";
-import { whatWeCanDo } from "../utils/homeArray";
+import { featureList, whatWeCanDo } from "../utils/homeArray";
 
 const HomePage: React.FC = () => {
+  const navigate = useNavigate();
   const [isDesktop, setDesktop] = useState(window.innerWidth > 600);
   const todoCxt = useContext(TodoContext);
   const uiCxt = useContext(UiContext);
@@ -43,13 +44,9 @@ const HomePage: React.FC = () => {
   //     setData(searchData);
   //   };
 
-  const showFormsHandler = () => {
-    setShowForms(true);
-  };
-  const showTaskFormHandler = (str: string) => {
-    uiCxt.showForm(str);
-
-    setShowForms(false);
+  const signupHandler = () => {
+    navigate("signin");
+    uiCxt.setSignedIn();
   };
   const updateMedia = () => {
     setDesktop(window.innerWidth > 600);
@@ -70,7 +67,10 @@ const HomePage: React.FC = () => {
             tasks more efficiently, collaborate with others, and increase your
             productivity.
           </div>
-          <div className="bg-softPrimary text-white font-bold rounded-2xl cursor-pointer p-3 w-[200px] text-center">
+          <div
+            className="bg-softPrimary text-white font-bold rounded-2xl cursor-pointer p-3 w-[200px] text-center"
+            onClick={signupHandler}
+          >
             Get Started, It's free
           </div>
         </div>
@@ -115,7 +115,20 @@ const HomePage: React.FC = () => {
           </Swiper>
         </div>
       </div>
-      <div></div>
+      <div className="bg-lightGrey px-8 md:px-14 lg:px-24 xl:px-32 py-11">
+        {featureList.map(item => (
+          <Reveal key={item.id}>
+            <div className="flex w-full p-8 rounded-lg bg-lightGrey mb-5 shadow-lg shadow-meduimGrey">
+              <div className="font-thin text-5xl text-meduimGrey w-[60%]">
+                {item.description}
+              </div>
+              <div className="font-extrabold text-xs text-meduimPrimary w-[40%]">
+                {item.title}
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
 
       {/* <div className=" max-h-screen overflow-scroll  h-screen relative bg-red-200">
       
