@@ -10,3 +10,8 @@ export const navItems: navType[] = [
   { id: "3", name: "Schedule", route: "/schedule", icon: ScheduleIcon },
   { id: "4", name: "Project", route: "/project", icon: AssignmentIcon },
 ];
+export const formModal = [
+  { id: "1", name: "Add A Project", type: "project", icon: AssignmentIcon },
+  { id: "2", name: "Add Task", type: "task", icon: TaskIcon },
+  { id: "3", name: "Create Schedule", type: "schedule", icon: ScheduleIcon },
+];

@@ -16,12 +16,26 @@ const TopNav: React.FC = () => {
   const uiCxt = useContext(UiContext);
   const [showSearch, setShowSearch] = useState(false);
   return (
-    <nav className="fixed top-0 left-0 flex items-center justify-between mx-auto w-full max-h-10 overflow-visible bg-softPrimaryLight px-8 md:px-14 lg:px-24 xl:px-32 py-11 shadow-2xl shadow-lightGrey z-20 bg-opacity-100">
-      <div className="  px-2 py-2 text-darkPrimary font-extralight text-4xl italic font-['blaka'] flex-1">
+    <nav
+      className={`fixed top-0 left-0 flex items-center justify-between mx-auto w-full max-h-10 overflow-visible px-8 md:px-14 lg:px-24 xl:px-32 py-11 shadow-2xl shadow-lightGrey z-20 bg-opacity-100 ${
+        uiCxt.evening
+          ? "text-softPrimary bg-darkPrimary"
+          : "text-darkPrimary  bg-softPrimaryLight "
+      }`}
+    >
+      <div
+        className={`px-2 py-2  font-extralight text-4xl italic font-['blaka'] flex-1 ${
+          uiCxt.evening ? "text-softPrimary " : "text-darkPrimary  "
+        }`}
+      >
         PROMPT
       </div>
 
-      <div className="hidden md:flex justify-between space-x-4 text-darkPrimary ">
+      <div
+        className={`hidden md:flex justify-between space-x-4 ${
+          uiCxt.evening ? "text-softPrimary " : "text-darkPrimary  "
+        }`}
+      >
         <div className="">
           {showSearch ? (
             <input
@@ -32,12 +46,15 @@ const TopNav: React.FC = () => {
           ) : (
             ""
           )}
-          <SearchIcon onClick={() => setShowSearch(prev => !prev)} />
+          <SearchIcon
+            onClick={() => setShowSearch(prev => !prev)}
+            className="hover:text-white"
+          />
         </div>
         <div className="hover:text-white">
           <NotificationsNoneIcon />
         </div>
-        <Link to={"/profile"}>
+        <Link to={"/profile"} className="hover:text-white">
           <PersonOutlineOutlinedIcon />
         </Link>
       </div>
