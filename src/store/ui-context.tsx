@@ -1,4 +1,5 @@
 import React, { useState, createContext, FunctionComponent } from "react";
+import { _EVENINGTIME } from "../constants";
 
 type UiContextObj = {
   task: boolean;
@@ -7,6 +8,7 @@ type UiContextObj = {
   form: string;
   menu: boolean;
   signedIn: boolean;
+  evening: boolean;
 
   showForm: (str: string) => void;
   showTask: () => void;
@@ -14,6 +16,7 @@ type UiContextObj = {
   showModal: (
     content: string | Element | JSX.Element | FunctionComponent
   ) => void;
+  setEvening: (hour: string) => void;
   hideModal: () => void;
   setSignedIn: () => void;
 };
@@ -24,7 +27,9 @@ export const UiContext = createContext<UiContextObj>({
   signedIn: true,
   modalOpened: false,
   modalContent: "",
-  showForm: (str: string) => {},
+  evening: false,
+  showForm: () => {},
+  setEvening: () => {},
   showTask: () => {},
   showMenu: () => {},
   showModal: () => {},
@@ -39,6 +44,7 @@ type Props = {
 const UiContextProvider: React.FC<Props> = props => {
   const [formShow, setFormShow] = useState("");
   const [modal, setModal] = useState(false);
+  const [eveningTime, setEveningTime] = useState<boolean>(false);
   const [modalContents, setModalContents] = useState<
     string | Element | JSX.Element | FunctionComponent
   >("");
@@ -72,6 +78,13 @@ const UiContextProvider: React.FC<Props> = props => {
     setModal(false);
     setModalContents("");
   };
+  const setEveningHandler = (hour: string) => {
+    if (Number(hour) > _EVENINGTIME) {
+      setEveningTime(true);
+    } else {
+      setEveningTime(false);
+    }
+  };
 
   const contextValue: UiContextObj = {
     task: taskShow,
@@ -80,7 +93,9 @@ const UiContextProvider: React.FC<Props> = props => {
     signedIn: signed,
     modalContent: modalContents,
     modalOpened: modal,
+    evening: eveningTime,
     showForm: showFormHandler,
+    setEvening: setEveningHandler,
     showTask: showTaskHandler,
     showMenu: showMenuHandler,
     setSignedIn: signedInHandler,

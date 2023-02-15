@@ -20,6 +20,7 @@ module.exports = {
         meduimGrey: "rgb(79,91,102)",
         darkGrey: "rgb(52,61,70)",
         white: "rgb(255, 255, 255)",
+        offWhite: "rgb(250, 250, 250)",
         black: "rgb(0,0,0)",
         accent: "rgb(195, 39, 11)",
         accentLight: "rgba(255, 119, 91, 10%)",

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import TopNav from "./TopNav";
+import { format } from "date-fns";
 
 import {
   getFirestore,
@@ -14,12 +15,14 @@ import { AuthContext } from "../store/auth-context";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import SideNav from "./SideNav";
+import { UiContext } from "../store/ui-context";
 
 type Props = {
   children?: React.ReactChild | React.ReactChild[];
 };
 const LayoutApp: React.FC<Props> = ({ children }) => {
   const authCtx = useContext(AuthContext);
+  const uiCtx = useContext(UiContext);
   const [user, loading, error] = useAuthState(auth);
   // const [email, setEmail] = useState("");
   const navigate = useNavigate();
@@ -40,17 +43,31 @@ const LayoutApp: React.FC<Props> = ({ children }) => {
       alert("An error occured while fetching user data");
     }
   };
+  const today = new Date();
+  const currentHour = format(today, "HH");
+  useEffect(() => {
+    uiCtx.setEvening(currentHour);
+  }, [currentHour]);
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate("/");
     fetchDetails();
   }, [user, loading]);
   return (
-    <body className="max-h-screen h-screen overflow-scroll relative bg-white py-10">
+    <body
+      className={`max-h-screen h-screen overflow-scroll relative  py-10 ${
+        uiCtx.evening ? "text-offWhite bg-darkGrey" : "text-meduimGrey bg-white"
+      }`}
+    >
       <TopNav />
-      <main className="mt-10">
+      <main className="mt-12 ">
         <SideNav />
-        <div className="ml-[200px]"> {children}</div>
+        <div
+          className={`ml-[200px] min-h-[calc(100vh-40px)]  relative z-[1px] `}
+        >
+          {" "}
+          {children}
+        </div>
       </main>
     </body>
   );

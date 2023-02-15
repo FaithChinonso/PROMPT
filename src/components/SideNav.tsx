@@ -8,7 +8,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 const SideNav = () => {
   return (
-    <div className="w-[200px] fixed left-0 top-[87px] h-screen bg-softPrimaryLight py-4">
+    <div className="w-[200px] fixed left-0 top-[87px] h-screen bg-softPrimaryLight py-4 ">
       {" "}
       <ul className=" items-center justify-center flex-1 flex flex-col space-y-6">
         {navItems.map((item: navType) => (
