@@ -1,5 +1,5 @@
 import React, { useState, createContext, FunctionComponent } from "react";
-import { _EVENINGTIME } from "../constants";
+import { _MAXEVENINGTIME, _MINEVENINGTIME } from "../constants";
 
 type UiContextObj = {
   task: boolean;
@@ -79,7 +79,7 @@ const UiContextProvider: React.FC<Props> = props => {
     setModalContents("");
   };
   const setEveningHandler = (hour: string) => {
-    if (Number(hour) > _EVENINGTIME) {
+    if (Number(hour) > _MINEVENINGTIME || Number(hour) < _MAXEVENINGTIME) {
       setEveningTime(true);
     } else {
       setEveningTime(false);

@@ -56,11 +56,11 @@ const LayoutApp: React.FC<Props> = ({ children }) => {
   return (
     <body
       className={`max-h-screen h-screen overflow-scroll relative  py-10 ${
-        uiCtx.evening ? "text-offWhite bg-darkGrey" : "text-meduimGrey bg-white"
+        uiCtx.evening ? "text-offWhite bg-black" : "text-meduimGrey bg-white"
       }`}
     >
       <TopNav />
-      <main className="mt-12 ">
+      <main className={`mt-12  `}>
         <SideNav />
         <div
           className={`ml-[200px] min-h-[calc(100vh-40px)]  relative z-[1px] `}
