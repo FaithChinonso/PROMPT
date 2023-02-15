@@ -4,6 +4,11 @@ import management from "../assets/images/management.jpg";
 import reminders from "../assets/images/reminders.jpg";
 import schedule from "../assets/images/schedule.jpg";
 import interfaced from "../assets/images/interface.jpg";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import GoogleIcon from "@mui/icons-material/Google";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 export const whatWeCanDo = [
   {
@@ -86,4 +91,11 @@ export const featureList = [
     description:
       "  Prompt lets you track progress on individual tasks and projects, so you can see how much work has been completed and how much is left to do.",
   },
+];
+export const socialLinks = [
+  { id: "1", icon: GoogleIcon },
+  { id: "2", icon: FacebookIcon },
+  { id: "3", icon: TwitterIcon },
+  { id: "4", icon: InstagramIcon },
+  { id: "5", icon: LinkedInIcon },
 ];
